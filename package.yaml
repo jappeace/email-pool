@@ -1,4 +1,4 @@
-name:                template
+name:                mail-pool
 version:             1.0.0
 license:             MIT
 author:              "Jappie Klooster"
@@ -46,16 +46,22 @@ default-extensions:
 
 dependencies:
 - base >= 4.7 && < 5
+- mime-mail
+- optparse-applicative
+- HaskellNet
+- network
+- resource-pool
+- microlens
 
 library:
   source-dirs: src
 
 executables:
   exe:
-    main:                exe.hs
+    main:                mail.hs
     source-dirs:         app
     dependencies:
-    - template
+    - mail-pool
     ghc-options:
     - -threaded
     - -rtsopts
