@@ -4,6 +4,9 @@ license:             MIT
 author:              "Jappie Klooster"
 maintainer:          "jappieklooster@hotmail.com"
 copyright:           "2019 Jappie Klooster"
+synopsis : "Preconfigured email connection pool on top of smtp."
+description: "Email helper functions with some sane defaults such as a resource pool and cli support"
+category: "Email"
 
 extra-source-files:
 - Readme.md

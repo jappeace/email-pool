@@ -17,5 +17,6 @@ mkDerivation {
     resource-pool
   ];
   preConfigure = "hpack";
+  description = "Preconfigured email connection pool on top of smtp";
   license = stdenv.lib.licenses.mit;
 }
