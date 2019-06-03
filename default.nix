@@ -3,7 +3,7 @@
 }:
 mkDerivation {
   pname = "mail-pool";
-  version = "1.0.0";
+  version = "1.0.1";
   src = ./.;
   isLibrary = true;
   isExecutable = true;
@@ -17,6 +17,7 @@ mkDerivation {
     resource-pool
   ];
   preConfigure = "hpack";
+  homepage = "https://github.com/jappeace/email-pool#readme";
   description = "Preconfigured email connection pool on top of smtp";
   license = stdenv.lib.licenses.mit;
 }
