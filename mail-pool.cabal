@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8b82bd52781b347acec48053603f864ab8880b6e3dae62e9c86a120c67295b58
+-- hash: 2dc0c65b84ae28d544985b619420b1f0f081e52b1b9693ca1b04350923efcfe4
 
 name:           mail-pool
 version:        1.0.0
@@ -19,7 +19,6 @@ extra-source-files:
 
 library
   exposed-modules:
-      Lib
       Network.Mail.Pool
   other-modules:
       Paths_mail_pool

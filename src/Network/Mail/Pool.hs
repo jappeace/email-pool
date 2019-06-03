@@ -1,12 +1,15 @@
 {-# LANGUAGE DeriveAnyClass #-}
 
-module Network.Mail.Pool where
+module Network.Mail.Pool(
+  module Network.Mail.Pool,
+  module X
+                        ) where
 
 import           Control.Exception
 import           Control.Monad.IO.Class
-import           Data.Pool
+import           Data.Pool               as X
 import           Lens.Micro
-import           Network.HaskellNet.SMTP
+import           Network.HaskellNet.SMTP as X
 import           Network.Mail.Mime
 import           Network.Socket
 import           Options.Applicative
