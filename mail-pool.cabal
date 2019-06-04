@@ -2,10 +2,10 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a75886d2555951512536b4197072fc95ff087ae71262c0193c538ce1dbd13e24
+-- hash: 0f644bc77dbb29013197d257b8c6e58622444333b3b33d4ced4338cbf8a12bbb
 
 name:           mail-pool
-version:        1.0.1
+version:        2.0.0
 synopsis:       Preconfigured email connection pool on top of smtp.
 description:    Email helper functions with some sane defaults such as a resource pool and cli support
 category:       Email
@@ -37,12 +37,14 @@ library
   ghc-options: -Wall -Wcompat -Wincomplete-uni-patterns -Wredundant-constraints -Wincomplete-record-updates -Widentities
   build-depends:
       HaskellNet
+    , HaskellNet-SSL
     , base >=4.7 && <5
     , microlens
     , mime-mail
     , network
     , optparse-applicative
     , resource-pool
+    , time
   default-language: Haskell2010
 
 executable exe
@@ -55,6 +57,7 @@ executable exe
   ghc-options: -Wall -Wcompat -Wincomplete-uni-patterns -Wredundant-constraints -Wincomplete-record-updates -Widentities -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HaskellNet
+    , HaskellNet-SSL
     , base >=4.7 && <5
     , mail-pool
     , microlens
@@ -62,4 +65,5 @@ executable exe
     , network
     , optparse-applicative
     , resource-pool
+    , time
   default-language: Haskell2010

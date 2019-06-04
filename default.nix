@@ -1,20 +1,21 @@
-{ mkDerivation, base, HaskellNet, hpack, microlens, mime-mail
-, network, optparse-applicative, resource-pool, stdenv
+{ mkDerivation, base, HaskellNet, HaskellNet-SSL, hpack, microlens
+, mime-mail, network, optparse-applicative, resource-pool, stdenv
+, time
 }:
 mkDerivation {
   pname = "mail-pool";
-  version = "1.0.1";
+  version = "2.0.0";
   src = ./.;
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    base HaskellNet microlens mime-mail network optparse-applicative
-    resource-pool
+    base HaskellNet HaskellNet-SSL microlens mime-mail network
+    optparse-applicative resource-pool time
   ];
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [
-    base HaskellNet microlens mime-mail network optparse-applicative
-    resource-pool
+    base HaskellNet HaskellNet-SSL microlens mime-mail network
+    optparse-applicative resource-pool time
   ];
   preConfigure = "hpack";
   homepage = "https://github.com/jappeace/email-pool#readme";

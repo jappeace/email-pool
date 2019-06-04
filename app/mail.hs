@@ -10,7 +10,7 @@ main = do
   smtp <- readSettings
   putStrLn "smtp settings:"
   print smtp
-  settings <- defSmtpPool smtp
+  settings <- smtpPool $ defSettings smtp
   sendEmail settings email
   where
     email =

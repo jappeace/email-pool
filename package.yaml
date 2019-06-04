@@ -1,5 +1,5 @@
 name:                mail-pool
-version:             1.0.1
+version:             2.0.0
 license:             MIT
 author:              "Jappie Klooster"
 maintainer:          "jappieklooster@hotmail.com"
@@ -56,6 +56,8 @@ dependencies:
 - network
 - resource-pool
 - microlens
+- HaskellNet-SSL
+- time
 
 library:
   source-dirs: src

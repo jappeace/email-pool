@@ -1,19 +1,37 @@
 {-# LANGUAGE DeriveAnyClass #-}
 
-module Network.Mail.Pool(
-  module Network.Mail.Pool,
-  module X
-                        ) where
+module Network.Mail.Pool
+  ( SmtpCred(..)
+  , smtpHost
+  , smtpLogin
+  , smtpPassword
+  , smtpPort
+  , module X
+  , emailOptions
+  , sendEmail
+  , smtpPool
+  , defSettings
+  , poolCred
+  , poolConnf
+  , poolStripes
+  , poolUnused
+  , poolStripeMax
+  , PoolSettings(..)
+  , openTls
+  , openPlain
+  ) where
 
 import           Control.Exception
 import           Control.Monad.IO.Class
-import           Data.Pool               as X
+import           Data.Pool                   as X
+import           Data.Time                   (NominalDiffTime)
 import           Lens.Micro
-import           Network.HaskellNet.SMTP as X
+import           Network.HaskellNet.SMTP     as X
+import           Network.HaskellNet.SMTP.SSL as X
 import           Network.Mail.Mime
 import           Network.Socket
 import           Options.Applicative
-import           Type.Reflection         (Typeable)
+import           Type.Reflection             (Typeable)
 
 -- | Failed to authetnicate with some upstream service (smtp for example)
 newtype ServiceAuthFailure a = ServiceAuthFailure a
@@ -38,25 +56,63 @@ smtpPassword = lens _smtpPassword (\a b -> a{_smtpPassword= b})
 smtpPort :: Lens' SmtpCred PortNumber
 smtpPort = lens _smtpPort (\a b -> a{_smtpPort= b})
 
+data PoolSettings = PoolSettings
+  { _poolCred      :: SmtpCred -- ^ credentials for smtp connection
+  , _poolConnf     :: SmtpCred -> IO SMTPConnection -- ^ smtpcred can't be factored out.
+  , _poolStripes   :: Int -- ^ stripe, see docs, I think I just need 1: https://hackage.haskell.org/package/resource-pool-0.2.3.2/docs/Data-Pool.html
+  , _poolUnused    :: NominalDiffTime -- ^ unused connections are kept open for a minute
+  , _poolStripeMax :: Int -- ^ max. 10 connections open per stripe
+  }
 
-defSmtpPool :: MonadIO m => SmtpCred -> m (Pool SMTPConnection)
-defSmtpPool smtp = do
-  liftIO $
+poolCred      :: Lens' PoolSettings SmtpCred
+poolCred      = lens _poolCred (\a b -> a{_poolCred=b})
+poolConnf     :: Lens' PoolSettings (SmtpCred -> IO SMTPConnection)
+poolConnf      = lens _poolConnf (\a b -> a{_poolConnf=b})
+poolStripes   :: Lens' PoolSettings Int
+poolStripes      = lens _poolStripes (\a b -> a{_poolStripes=b})
+poolUnused    :: Lens' PoolSettings NominalDiffTime
+poolUnused      = lens _poolUnused (\a b -> a{_poolUnused=b})
+poolStripeMax :: Lens' PoolSettings Int
+poolStripeMax      = lens _poolStripeMax (\a b -> a{_poolStripeMax=b})
+
+defSettings :: SmtpCred -> PoolSettings
+defSettings cred = PoolSettings
+  { _poolCred = cred
+  , _poolConnf = openPlain
+  , _poolStripes = 1
+  , _poolUnused = 60
+  , _poolStripeMax = 5
+  }
+
+openPlain :: SmtpCred -> IO SMTPConnection
+openPlain smtp = connectSMTPPort (smtp ^. smtpHost) (smtp ^. smtpPort)
+
+openTls :: SmtpCred -> IO SMTPConnection
+openTls smtp = connectSMTPSTARTTLSWithSettings (smtp ^. smtpHost) $ defaultSettingsSMTPSTARTTLS{
+    sslPort = (smtp ^. smtpPort)
+  }
+
+
+smtpPool :: PoolSettings -> IO (Pool SMTPConnection)
+smtpPool smtp =
     createPool
-      (authAndConnect smtp)
+      (do
+        conn <- smtp ^. poolConnf $ smtp ^. poolCred
+        authorize conn (smtp ^. poolCred)
+        pure conn
+      )
       closeSMTP
-      1 -- stripe, see docs, I think I just need 1: https://hackage.haskell.org/package/resource-pool-0.2.3.2/docs/Data-Pool.html
-      60 -- unused connections are kept open for a minute
-      5 -- max. 10 connections open per stripe
+      (smtp ^. poolStripes)
+      (smtp ^. poolUnused)
+      5
 
 handleAny :: (SomeException -> IO a) -> IO a -> IO a
 handleAny = handle
 
 -- | we need to auth only once per connection.
 --   this is annoying because we want to crash on failure to auth.
-authAndConnect :: SmtpCred -> IO SMTPConnection
-authAndConnect smtp = do
-  conn <- connectSMTPPort (smtp ^. smtpHost) (smtp ^. smtpPort)
+authorize :: SMTPConnection -> SmtpCred -> IO ()
+authorize conn smtp = do
   handleAny
     (\ex -> do
        closeSMTP conn -- don't leak
@@ -64,7 +120,7 @@ authAndConnect smtp = do
     isSuccess <-
       authenticate LOGIN (smtp ^. smtpLogin) (smtp ^. smtpPassword) conn
     if isSuccess
-      then pure conn
+      then pure ()
       else throwIO $
            ServiceAuthFailure $
            smtpPassword .~ "obfuscated, see the running instance CLI" $ smtp
