@@ -50,14 +50,14 @@ default-extensions:
 
 dependencies:
 - base >= 4.7 && < 5
-- mime-mail
-- optparse-applicative
-- HaskellNet
-- network
-- resource-pool
-- microlens
-- HaskellNet-SSL
-- time
+- mime-mail >= 0.4.14 && < 0.5
+- optparse-applicative >= 0.14.3.0 && < 0.15
+- HaskellNet >=0.5.1 && < 0.6
+- network >= 2.8.0.0 && < 3.0.0.0
+- resource-pool >= 0.2.3.2 && < 0.3.0.0
+- microlens >=0.4.10 && < 0.5.0
+- HaskellNet-SSL >= 0.3.4.1 && < 0.4
+- time >= 1.8.0.2 && < 1.9
 
 library:
   source-dirs: src
