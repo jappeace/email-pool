@@ -1,25 +1,32 @@
 {-# LANGUAGE DeriveAnyClass #-}
 
 module Network.Mail.Pool
-  ( SmtpCred(..)
-  , smtpHost
-  , smtpLogin
-  , smtpPassword
-  , smtpPort
-  , module X
-  , emailOptions
-  , sendEmail
-  , smtpPool
+  (
+
+  -- * pool
+    smtpPool
+  , PoolSettings(..)
   , defSettings
+  , openTls
+  , openPlain
+  , openTls'
+  -- * use pool
+  , sendEmail
+  -- * optparse
+  , SmtpCred(..)
+  , emailOptions
+  -- * lenses
   , poolCred
   , poolConnf
   , poolStripes
   , poolUnused
   , poolStripeMax
-  , PoolSettings(..)
-  , openTls
-  , openPlain
-  , openTls'
+  , smtpHost
+  , smtpLogin
+  , smtpPassword
+  , smtpPort
+ -- * re exports
+  , module X
   ) where
 
 import           Control.Exception
