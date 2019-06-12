@@ -2,10 +2,10 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9eaca3b20a108da44ec60fb4889d688d312a728fd14024a6bb923b156d34389d
+-- hash: cbd36a55a0bc6a23d7c34c05cc5192f66ef504d18668710b4a320e4da06a8dc8
 
 name:           mail-pool
-version:        2.0.0
+version:        2.0.1
 synopsis:       Preconfigured email connection pool on top of smtp.
 description:    Email helper functions with some sane defaults such as a resource pool and cli support
 category:       Email

@@ -4,7 +4,7 @@
 }:
 mkDerivation {
   pname = "mail-pool";
-  version = "2.0.0";
+  version = "2.0.1";
   src = ./.;
   isLibrary = true;
   isExecutable = true;
