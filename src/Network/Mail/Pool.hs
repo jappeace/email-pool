@@ -19,6 +19,7 @@ module Network.Mail.Pool
   , PoolSettings(..)
   , openTls
   , openPlain
+  , openTls'
   ) where
 
 import           Control.Exception
@@ -88,7 +89,10 @@ openPlain :: SmtpCred -> IO SMTPConnection
 openPlain smtp = connectSMTPPort (smtp ^. smtpHost) (smtp ^. smtpPort)
 
 openTls :: SmtpCred -> IO SMTPConnection
-openTls smtp = connectSMTPSTARTTLSWithSettings (smtp ^. smtpHost) $ defaultSettingsSMTPSTARTTLS{
+openTls = openTls' defaultSettingsSMTPSTARTTLS
+
+openTls' :: Settings -> SmtpCred -> IO SMTPConnection
+openTls' def smtp = connectSMTPSTARTTLSWithSettings (smtp ^. smtpHost) $ def {
     sslPort = (smtp ^. smtpPort)
   }
 
