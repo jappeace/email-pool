@@ -1,18 +1,23 @@
 {-# LANGUAGE DeriveAnyClass #-}
 
+-- | SMTP is s an incredibly stable and well supported protocol.
+--   Using this rather then API's prevents vendorlocking.
+--
+--   This module provides a ready to go connection pool for SMTP.
+--   Which has been used in various deployments already.
 module Network.Mail.Pool
   (
     sendEmail
-  -- * Pool
   , smtpPool
-  , PoolSettings(..)
   , defSettings
   , SmtpCred(..)
-  , emailOptions
+  , PoolSettings(..)
   -- ** specify connection type
   , openTls
   , openPlain
   , openTls'
+  -- ** optparse applicative
+  , emailOptions
   -- ** lenses
   , poolCred
   , poolConnf
@@ -47,8 +52,7 @@ newtype ServiceAuthFailure a = ServiceAuthFailure a
   deriving (Typeable, Show)
   deriving anyclass Exception
 
--- | We use smtp because it's an incredibly stable and well supported protocol
---   this prevents vendorlocking.
+-- | Authentication information for the SMTP connection
 data SmtpCred = SmtpCred
   { _smtpPassword :: String
   , _smtpLogin    :: String
@@ -72,15 +76,18 @@ smtpPassword = lens _smtpPassword (\a b -> a{_smtpPassword= b})
 smtpPort :: Lens' SmtpCred PortNumber
 smtpPort = lens _smtpPort (\a b -> a{_smtpPort= b})
 
+-- | This allows you to override the default settings from 'defSettings'
 data PoolSettings = PoolSettings
-  { _poolCred      :: SmtpCred -- ^ credentials for smtp connection
+
+  { -- | credentials for smtp connection
+    _poolCred      :: SmtpCred
    -- | allows overriding of the opening function, for example 'openPlain' or 'openTls'
   , _poolConnf     :: SmtpCred -> IO SMTPConnection
    -- | stripes, see docs: https://hackage.haskell.org/package/resource-pool-0.2.3.2/docs/Data-Pool.html
   , _poolStripes   :: Int
-   -- | unused connections are kept open for a minute
+   -- | specify how long connections are kept open.
   , _poolUnused    :: NominalDiffTime
-   -- | max. 10 connections open per stripe
+   -- | how many connections per stripe.
   , _poolStripeMax :: Int
   }
 
@@ -95,6 +102,7 @@ poolUnused      = lens _poolUnused (\a b -> a{_poolUnused=b})
 poolStripeMax :: Lens' PoolSettings Int
 poolStripeMax      = lens _poolStripeMax (\a b -> a{_poolStripeMax=b})
 
+-- | Create settings with good defaults from credential information
 defSettings :: SmtpCred -> PoolSettings
 defSettings cred = PoolSettings
   { _poolCred = cred
@@ -112,10 +120,11 @@ openTls = openTls' defaultSettingsSMTPSTARTTLS
 
 openTls' :: Settings -> SmtpCred -> IO SMTPConnection
 openTls' def smtp = connectSMTPSTARTTLSWithSettings (smtp ^. smtpHost) $ def {
-    sslPort = (smtp ^. smtpPort)
+    sslPort = smtp ^. smtpPort
   }
 
 
+-- | Construct a connection pool from settings.
 smtpPool :: PoolSettings -> IO (Pool SMTPConnection)
 smtpPool smtp =
     createPool
@@ -170,5 +179,6 @@ emailOptions =
      value 587 <>
      metavar "SMTP-PORT")
 
+-- | Send a 'Mail' with help of a connection pool.
 sendEmail :: MonadIO m => Pool SMTPConnection -> Mail -> m ()
 sendEmail pool = liftIO . withResource pool . sendMimeMail2
