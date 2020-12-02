@@ -1,5 +1,5 @@
 name:                mail-pool
-version:             2.1.0
+version:             2.2.0
 license:             MIT
 author:              "Jappie Klooster"
 maintainer:          "jappieklooster@hotmail.com"
@@ -12,6 +12,7 @@ github: jappeace/email-pool
 extra-source-files:
 - Readme.md
 - LICENSE
+- Changelog.md
 
 ghc-options:
     - -Wall
@@ -50,14 +51,15 @@ default-extensions:
 
 dependencies:
 - base >= 4.7 && < 5
-- mime-mail >= 0.4.14 && < 0.5
-- optparse-applicative >= 0.14.3.0 && < 0.15
-- HaskellNet >=0.5.1 && < 0.6
-- network >= 2.8.0.0 && < 3.0.0.0
-- resource-pool >= 0.2.3.2 && < 0.3.0.0
-- microlens >=0.4.10 && < 0.5.0
-- HaskellNet-SSL >= 0.3.4.1 && < 0.4
-- time >= 1.8.0.2 && < 1.9
+- mime-mail >= 0.4.14 
+- optparse-applicative >= 0.14.3.0 
+- HaskellNet >=0.5.1 
+- network >= 2.8.0.0
+- resource-pool >= 0.2.3.2
+- microlens >=0.4.10 
+- HaskellNet-SSL >= 0.3.4.1 
+- time >= 1.8.0.2 
+- aeson >= 1.4
 
 library:
   source-dirs: src

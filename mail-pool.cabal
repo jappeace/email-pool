@@ -1,11 +1,13 @@
--- This file has been generated from package.yaml by hpack version 0.28.2.
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.1.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c299804a7b298ac656a71231f969d24b083053723638ab7fb7c3457cd1e7c73d
+-- hash: a5217da958b2e9c7340fe97627cde9a46153981cd42ea05f243a279caa92d65f
 
 name:           mail-pool
-version:        2.1.0
+version:        2.2.0
 synopsis:       Preconfigured email connection pool on top of smtp.
 description:    Email helper functions with some sane defaults such as a resource pool and cli support
 category:       Email
@@ -17,10 +19,10 @@ copyright:      2019 Jappie Klooster
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
-cabal-version:  >= 1.10
 extra-source-files:
-    LICENSE
     Readme.md
+    LICENSE
+    Changelog.md
 
 source-repository head
   type: git
@@ -36,15 +38,16 @@ library
   default-extensions: EmptyCase FlexibleContexts FlexibleInstances InstanceSigs MultiParamTypeClasses LambdaCase MultiWayIf NamedFieldPuns TupleSections DeriveFoldable DeriveFunctor DeriveGeneric DeriveLift DeriveTraversable DerivingStrategies GeneralizedNewtypeDeriving StandaloneDeriving OverloadedStrings TypeApplications
   ghc-options: -Wall -Wcompat -Wincomplete-uni-patterns -Wredundant-constraints -Wincomplete-record-updates -Widentities
   build-depends:
-      HaskellNet >=0.5.1 && <0.6
-    , HaskellNet-SSL >=0.3.4.1 && <0.4
+      HaskellNet >=0.5.1
+    , HaskellNet-SSL >=0.3.4.1
+    , aeson >=1.4
     , base >=4.7 && <5
-    , microlens >=0.4.10 && <0.5.0
-    , mime-mail >=0.4.14 && <0.5
-    , network >=2.8.0.0 && <3.0.0.0
-    , optparse-applicative >=0.14.3.0 && <0.15
-    , resource-pool >=0.2.3.2 && <0.3.0.0
-    , time >=1.8.0.2 && <1.9
+    , microlens >=0.4.10
+    , mime-mail >=0.4.14
+    , network >=2.8.0.0
+    , optparse-applicative >=0.14.3.0
+    , resource-pool >=0.2.3.2
+    , time >=1.8.0.2
   default-language: Haskell2010
 
 executable exe
@@ -56,14 +59,15 @@ executable exe
   default-extensions: EmptyCase FlexibleContexts FlexibleInstances InstanceSigs MultiParamTypeClasses LambdaCase MultiWayIf NamedFieldPuns TupleSections DeriveFoldable DeriveFunctor DeriveGeneric DeriveLift DeriveTraversable DerivingStrategies GeneralizedNewtypeDeriving StandaloneDeriving OverloadedStrings TypeApplications
   ghc-options: -Wall -Wcompat -Wincomplete-uni-patterns -Wredundant-constraints -Wincomplete-record-updates -Widentities -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HaskellNet >=0.5.1 && <0.6
-    , HaskellNet-SSL >=0.3.4.1 && <0.4
+      HaskellNet >=0.5.1
+    , HaskellNet-SSL >=0.3.4.1
+    , aeson >=1.4
     , base >=4.7 && <5
     , mail-pool
-    , microlens >=0.4.10 && <0.5.0
-    , mime-mail >=0.4.14 && <0.5
-    , network >=2.8.0.0 && <3.0.0.0
-    , optparse-applicative >=0.14.3.0 && <0.15
-    , resource-pool >=0.2.3.2 && <0.3.0.0
-    , time >=1.8.0.2 && <1.9
+    , microlens >=0.4.10
+    , mime-mail >=0.4.14
+    , network >=2.8.0.0
+    , optparse-applicative >=0.14.3.0
+    , resource-pool >=0.2.3.2
+    , time >=1.8.0.2
   default-language: Haskell2010

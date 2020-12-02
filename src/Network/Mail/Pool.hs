@@ -2,20 +2,18 @@
 
 module Network.Mail.Pool
   (
-
-  -- * pool
-    smtpPool
+    sendEmail
+  -- * Pool
+  , smtpPool
   , PoolSettings(..)
   , defSettings
+  , SmtpCred(..)
+  , emailOptions
+  -- ** specify connection type
   , openTls
   , openPlain
   , openTls'
-  -- * use pool
-  , sendEmail
-  -- * optparse
-  , SmtpCred(..)
-  , emailOptions
-  -- * lenses
+  -- ** lenses
   , poolCred
   , poolConnf
   , poolStripes
@@ -25,12 +23,15 @@ module Network.Mail.Pool
   , smtpLogin
   , smtpPassword
   , smtpPort
- -- * re exports
+  -- * Exceptions
+  , ServiceAuthFailure
+  -- * re exports
   , module X
   ) where
 
 import           Control.Exception
 import           Control.Monad.IO.Class
+import           Data.Aeson
 import           Data.Pool                   as X
 import           Data.Time                   (NominalDiffTime)
 import           Lens.Micro
@@ -55,6 +56,13 @@ data SmtpCred = SmtpCred
   , _smtpPort     :: PortNumber
   } deriving (Show)
 
+instance FromJSON SmtpCred where
+     parseJSON = withObject "SmtpCred" $ \v -> SmtpCred
+        <$> v .: "password"
+        <*> v .: "login"
+        <*> v .: "host"
+        <*> (fromInteger <$> v .: "port")
+
 smtpHost :: Lens' SmtpCred String
 smtpHost = lens _smtpHost (\a b -> a{_smtpHost= b})
 smtpLogin :: Lens' SmtpCred String
@@ -66,10 +74,14 @@ smtpPort = lens _smtpPort (\a b -> a{_smtpPort= b})
 
 data PoolSettings = PoolSettings
   { _poolCred      :: SmtpCred -- ^ credentials for smtp connection
-  , _poolConnf     :: SmtpCred -> IO SMTPConnection -- ^ smtpcred can't be factored out.
-  , _poolStripes   :: Int -- ^ stripe, see docs, I think I just need 1: https://hackage.haskell.org/package/resource-pool-0.2.3.2/docs/Data-Pool.html
-  , _poolUnused    :: NominalDiffTime -- ^ unused connections are kept open for a minute
-  , _poolStripeMax :: Int -- ^ max. 10 connections open per stripe
+   -- | allows overriding of the opening function, for example 'openPlain' or 'openTls'
+  , _poolConnf     :: SmtpCred -> IO SMTPConnection
+   -- | stripes, see docs: https://hackage.haskell.org/package/resource-pool-0.2.3.2/docs/Data-Pool.html
+  , _poolStripes   :: Int
+   -- | unused connections are kept open for a minute
+  , _poolUnused    :: NominalDiffTime
+   -- | max. 10 connections open per stripe
+  , _poolStripeMax :: Int
   }
 
 poolCred      :: Lens' PoolSettings SmtpCred
