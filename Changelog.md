@@ -5,3 +5,4 @@
 
 + Add changelog
 + Add fromJSON instance to smtp cred so this easily works with yesod.
++ Improve docs.
