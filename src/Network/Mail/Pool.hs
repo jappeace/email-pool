@@ -102,7 +102,7 @@ poolUnused      = lens _poolUnused (\a b -> a{_poolUnused=b})
 poolStripeMax :: Lens' PoolSettings Int
 poolStripeMax      = lens _poolStripeMax (\a b -> a{_poolStripeMax=b})
 
--- | Create settings with good defaults from credential information
+-- | Create settings with good defaults from 'SmtpCred'.
 defSettings :: SmtpCred -> PoolSettings
 defSettings cred = PoolSettings
   { _poolCred = cred
