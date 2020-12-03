@@ -1,5 +1,8 @@
 # Changelog mailpool
 
+# Release 2.2.1 2020.12.03 
+
++ Try making hackage build by upgrading haskell net
 
 # Release 2.2.0 2020.12.02 
 
