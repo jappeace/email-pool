@@ -1,5 +1,8 @@
 # Changelog mailpool
 
+# Release 2.2.3 2020.12.03 
++ No I need to fix haskell net
+
 # Release 2.2.2 2020.12.03 
 + Maybe it works if we put the same base constraint on this package as haskell net?
 
