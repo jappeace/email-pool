@@ -62,7 +62,7 @@ executable exe
       HaskellNet >=0.5.2
     , HaskellNet-SSL >=0.3.4.1
     , aeson >=1.4
-    , base >=4.7 && <5
+    , base >=4.7 && <4.14
     , mail-pool
     , microlens >=0.4.10
     , mime-mail >=0.4.14

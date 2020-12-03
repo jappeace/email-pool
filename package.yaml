@@ -1,5 +1,5 @@
 name:                mail-pool
-version:             2.2.1
+version:             2.2.2
 license:             MIT
 author:              "Jappie Klooster"
 maintainer:          "jappieklooster@hotmail.com"
@@ -50,10 +50,10 @@ default-extensions:
   - TypeApplications
 
 dependencies:
-- base >= 4.7 && < 5
+- base >= 4.7 && < 4.14 # haskell net forces us to do this
 - mime-mail >= 0.4.14 
 - optparse-applicative >= 0.14.3.0 
-- HaskellNet >=0.5.2 
+- HaskellNet >=0.5.1 
 - network >= 2.8.0.0
 - resource-pool >= 0.2.3.2
 - microlens >=0.4.10 

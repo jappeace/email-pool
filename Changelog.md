@@ -1,5 +1,8 @@
 # Changelog mailpool
 
+# Release 2.2.2 2020.12.03 
++ Maybe it works if we put the same base constraint on this package as haskell net?
+
 # Release 2.2.1 2020.12.03 
 
 + Try making hackage build by upgrading haskell net
