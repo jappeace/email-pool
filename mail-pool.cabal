@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bfa3315cb26dcf46ac6edc4bbfa56c6d45ded5dc0b4879730c949f2190375565
+-- hash: f2f85cd494ec1e2df7247b76c890d08c48435918d7d88f2bc0d928cd0f09596d
 
 name:           mail-pool
 version:        2.2.3
@@ -41,7 +41,7 @@ library
       HaskellNet >=0.5.1
     , HaskellNet-SSL >=0.3.4.1
     , aeson >=1.4
-    , base >=4.7
+    , base >=4.7 && <5
     , microlens >=0.4.10
     , mime-mail >=0.4.14
     , network >=2.8.0.0
@@ -62,7 +62,7 @@ executable exe
       HaskellNet >=0.5.1
     , HaskellNet-SSL >=0.3.4.1
     , aeson >=1.4
-    , base >=4.7
+    , base >=4.7 && <5
     , mail-pool
     , microlens >=0.4.10
     , mime-mail >=0.4.14
