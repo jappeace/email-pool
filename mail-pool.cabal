@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a5217da958b2e9c7340fe97627cde9a46153981cd42ea05f243a279caa92d65f
+-- hash: 3e5191a03c6c8b4fe92505a49be03525c6775ff36b729014daa5b1f7a3770b2f
 
 name:           mail-pool
-version:        2.2.0
+version:        2.2.1
 synopsis:       Preconfigured email connection pool on top of smtp.
 description:    Email helper functions with some sane defaults such as a resource pool and cli support
 category:       Email
@@ -38,7 +38,7 @@ library
   default-extensions: EmptyCase FlexibleContexts FlexibleInstances InstanceSigs MultiParamTypeClasses LambdaCase MultiWayIf NamedFieldPuns TupleSections DeriveFoldable DeriveFunctor DeriveGeneric DeriveLift DeriveTraversable DerivingStrategies GeneralizedNewtypeDeriving StandaloneDeriving OverloadedStrings TypeApplications
   ghc-options: -Wall -Wcompat -Wincomplete-uni-patterns -Wredundant-constraints -Wincomplete-record-updates -Widentities
   build-depends:
-      HaskellNet >=0.5.1
+      HaskellNet >=0.5.2
     , HaskellNet-SSL >=0.3.4.1
     , aeson >=1.4
     , base >=4.7 && <5
@@ -59,7 +59,7 @@ executable exe
   default-extensions: EmptyCase FlexibleContexts FlexibleInstances InstanceSigs MultiParamTypeClasses LambdaCase MultiWayIf NamedFieldPuns TupleSections DeriveFoldable DeriveFunctor DeriveGeneric DeriveLift DeriveTraversable DerivingStrategies GeneralizedNewtypeDeriving StandaloneDeriving OverloadedStrings TypeApplications
   ghc-options: -Wall -Wcompat -Wincomplete-uni-patterns -Wredundant-constraints -Wincomplete-record-updates -Widentities -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HaskellNet >=0.5.1
+      HaskellNet >=0.5.2
     , HaskellNet-SSL >=0.3.4.1
     , aeson >=1.4
     , base >=4.7 && <5

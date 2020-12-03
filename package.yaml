@@ -1,5 +1,5 @@
 name:                mail-pool
-version:             2.2.0
+version:             2.2.1
 license:             MIT
 author:              "Jappie Klooster"
 maintainer:          "jappieklooster@hotmail.com"
@@ -53,7 +53,7 @@ dependencies:
 - base >= 4.7 && < 5
 - mime-mail >= 0.4.14 
 - optparse-applicative >= 0.14.3.0 
-- HaskellNet >=0.5.1 
+- HaskellNet >=0.5.2 
 - network >= 2.8.0.0
 - resource-pool >= 0.2.3.2
 - microlens >=0.4.10 
