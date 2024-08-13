@@ -54,7 +54,7 @@ common common-options
     -fdefer-diagnostics -Wunused-packages
     -fenable-th-splice-warnings
     -fno-omit-yields
-    -threaded -rtsopts "-with-rtsopts=-N -M7G -T -Iw10"
+    -threaded
 
   build-depends:
       base >=4.9.1.0 && <4.21.0
@@ -66,6 +66,8 @@ library
   exposed-modules:
       Network.Mail.Pool
   other-modules:
+      Paths_mail_pool
+  autogen-modules:
       Paths_mail_pool
   hs-source-dirs:
       src
@@ -85,6 +87,8 @@ executable exe
   import: common-options
   main-is: mail.hs
   other-modules:
+      Paths_mail_pool
+  autogen-modules:
       Paths_mail_pool
   hs-source-dirs:
       app
