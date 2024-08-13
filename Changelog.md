@@ -1,5 +1,12 @@
 # Changelog mailpool
 
+# Release 2.3.0 2024.08.12 
++ set default to starttls
+  + apparantly mailgun requires it by default now
+  + this change is what makes it a minor release
++ upgrade to new data-pool
+
+
 # Release 2.2.3 2020.12.03 
 + No I need to fix haskell net
 

@@ -16,12 +16,12 @@ module Network.Mail.Pool
   , openTls
   , openPlain
   , openTls'
+  , createPoolConfig
   -- ** optparse applicative
   , emailOptions
   -- ** lenses
   , poolCred
   , poolConnf
-  , poolStripes
   , poolUnused
   , poolStripeMax
   , smtpHost
@@ -38,7 +38,6 @@ import           Control.Exception
 import           Control.Monad.IO.Class
 import           Data.Aeson
 import           Data.Pool                   as X
-import           Data.Time                   (NominalDiffTime)
 import           Lens.Micro
 import           Network.HaskellNet.SMTP     as X
 import           Network.HaskellNet.SMTP.SSL as X
@@ -83,10 +82,8 @@ data PoolSettings = PoolSettings
     _poolCred      :: SmtpCred
    -- | allows overriding of the opening function, for example 'openPlain' or 'openTls'
   , _poolConnf     :: SmtpCred -> IO SMTPConnection
-   -- | stripes, see docs: https://hackage.haskell.org/package/resource-pool-0.2.3.2/docs/Data-Pool.html
-  , _poolStripes   :: Int
    -- | specify how long connections are kept open.
-  , _poolUnused    :: NominalDiffTime
+  , _poolUnused    :: Double
    -- | how many connections per stripe.
   , _poolStripeMax :: Int
   }
@@ -95,9 +92,7 @@ poolCred      :: Lens' PoolSettings SmtpCred
 poolCred      = lens _poolCred (\a b -> a{_poolCred=b})
 poolConnf     :: Lens' PoolSettings (SmtpCred -> IO SMTPConnection)
 poolConnf      = lens _poolConnf (\a b -> a{_poolConnf=b})
-poolStripes   :: Lens' PoolSettings Int
-poolStripes      = lens _poolStripes (\a b -> a{_poolStripes=b})
-poolUnused    :: Lens' PoolSettings NominalDiffTime
+poolUnused    :: Lens' PoolSettings Double
 poolUnused      = lens _poolUnused (\a b -> a{_poolUnused=b})
 poolStripeMax :: Lens' PoolSettings Int
 poolStripeMax      = lens _poolStripeMax (\a b -> a{_poolStripeMax=b})
@@ -106,8 +101,7 @@ poolStripeMax      = lens _poolStripeMax (\a b -> a{_poolStripeMax=b})
 defSettings :: SmtpCred -> PoolSettings
 defSettings cred = PoolSettings
   { _poolCred = cred
-  , _poolConnf = openPlain
-  , _poolStripes = 1
+  , _poolConnf = openTls
   , _poolUnused = 60
   , _poolStripeMax = 5
   }
@@ -126,17 +120,21 @@ openTls' def smtp = connectSMTPSTARTTLSWithSettings (smtp ^. smtpHost) $ def {
 
 -- | Construct a connection pool from settings.
 smtpPool :: PoolSettings -> IO (Pool SMTPConnection)
-smtpPool smtp =
-    createPool
+smtpPool =
+  newPool . createPoolConfig
+
+-- | allows manipulation of the underlying resourcepool config
+createPoolConfig :: PoolSettings -> PoolConfig SMTPConnection
+createPoolConfig smtp =
+    defaultPoolConfig
       (do
         conn <- smtp ^. poolConnf $ smtp ^. poolCred
         authorize conn (smtp ^. poolCred)
         pure conn
       )
       closeSMTP
-      (smtp ^. poolStripes)
       (smtp ^. poolUnused)
-      5
+      (smtp ^. poolStripeMax )
 
 handleAny :: (SomeException -> IO a) -> IO a -> IO a
 handleAny = handle
@@ -181,4 +179,4 @@ emailOptions =
 
 -- | Send a 'Mail' with help of a connection pool.
 sendEmail :: MonadIO m => Pool SMTPConnection -> Mail -> m ()
-sendEmail pool = liftIO . withResource pool . sendMimeMail2
+sendEmail pool = liftIO . withResource pool . sendMail
