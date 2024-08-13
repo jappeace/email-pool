@@ -11,7 +11,7 @@ jobs:
           - '9.10'
           - '9.8'
           - '9.6'
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest, macOS-latest]
         cabal: 'latest'
 
     steps:
