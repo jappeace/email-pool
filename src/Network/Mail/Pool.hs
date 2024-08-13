@@ -106,7 +106,7 @@ poolStripeMax      = lens _poolStripeMax (\a b -> a{_poolStripeMax=b})
 defSettings :: SmtpCred -> PoolSettings
 defSettings cred = PoolSettings
   { _poolCred = cred
-  , _poolConnf = openPlain
+  , _poolConnf = openTls
   , _poolStripes = 1
   , _poolUnused = 60
   , _poolStripeMax = 5
