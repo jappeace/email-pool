@@ -1,5 +1,9 @@
 # Changelog mailpool
 
+# Release 2.3.1 2024.08.14
++ set poolStripeMax to numCapabilities
+  this causes issues if set to a low number. (5)
+
 # Release 2.3.0 2024.08.12 
 + set default to starttls
   + apparantly mailgun requires it by default now

@@ -45,6 +45,7 @@ import           Network.Mail.Mime
 import           Network.Socket
 import           Options.Applicative
 import           Type.Reflection             (Typeable)
+import GHC.Conc(numCapabilities)
 
 -- | Failed to authetnicate with some upstream service (smtp for example)
 newtype ServiceAuthFailure a = ServiceAuthFailure a
@@ -103,7 +104,7 @@ defSettings cred = PoolSettings
   { _poolCred = cred
   , _poolConnf = openTls
   , _poolUnused = 60
-  , _poolStripeMax = 5
+  , _poolStripeMax = numCapabilities
   }
 
 openPlain :: SmtpCred -> IO SMTPConnection

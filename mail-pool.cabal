@@ -1,7 +1,7 @@
 cabal-version:      3.0
 
 name:           mail-pool
-version:        2.3.0
+version:        2.3.1
 synopsis:       Preconfigured email connection pool on top of smtp.
 description:    Email helper functions with some sane defaults such as a resource pool and cli support
 category:       Email
